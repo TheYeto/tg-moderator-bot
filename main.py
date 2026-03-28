@@ -1,9 +1,12 @@
+"""Entry point -- starts the bot with long polling."""
+
 import asyncio
 import logging
 
 from aiogram import Bot, Dispatcher
 
 from bot.config import Settings
+from bot.handlers.cleanup import router as cleanup_router
 from bot.handlers.join_cleanup import router as join_cleanup_router
 
 
@@ -19,6 +22,8 @@ async def main() -> None:
     bot = Bot(token=settings.bot_token)
     dp = Dispatcher()
 
+    # Register handler routers
+    dp.include_router(cleanup_router)
     dp.include_router(join_cleanup_router)
 
     logger.info("Bot starting, polling for updates...")
