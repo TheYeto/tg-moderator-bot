@@ -26,3 +26,12 @@ def get_count_for_date(chat_id: int, d: date) -> int:
     """Return deletions for a specific date."""
     return _counts.get((chat_id, d.isoformat()), 0)
 
+
+def get_all_today_counts() -> dict[int, int]:
+    """Return {chat_id: count} for every group with deletions today."""
+    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    result: dict[int, int] = {}
+    for (cid, day), count in _counts.items():
+        if day == today and count > 0:
+            result[cid] = count
+    return result
